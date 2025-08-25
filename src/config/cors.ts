@@ -1,20 +1,18 @@
-import cors, { CorsOptions } from "cors";
+import { CorsOptions } from "cors";
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173", 
-  "http://localhost:3000",
+const whitelist = [
+  "https://global-disenode-backend-services-fr.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:4000",
 ];
 
-export const corsConfig: CorsOptions = {
+export const corsOptions: CorsOptions = {
   origin(origin, cb) {
-    // Permitir tools como Postman (sin origin) y orígenes en whitelist
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    return cb(new Error("Not allowed by CORS"));
+    // Permite tools sin Origin (Postman/cURL)
+    if (!origin) return cb(null, true);
+    if (whitelist.includes(origin)) return cb(null, true);
+    return cb(new Error('CORS: Origin no permitido'));
   },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Authorization", "Content-Type"],
-  credentials: false, // true solo si usas cookies
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
 };
-
-export const corsMiddleware = cors(corsConfig);

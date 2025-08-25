@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from "cors";
 
 import { connectDB } from './config/db';
-import { corsMiddleware } from './config/cors';
+import { corsOptions } from './config/cors';
 import authRoutes from "./routes/authRoutes";
 import taskRoutes from "./routes/taskRoutes";
 
@@ -16,7 +16,7 @@ connectDB();
 export const server = express();
 
 //Habilitar las opciones del cors
-server.use(corsMiddleware)
+server.use(cors(corsOptions))
 
 //Habilitar la lectura de json
 server.use(express.json())
